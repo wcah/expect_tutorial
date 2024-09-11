@@ -1,0 +1,39 @@
+#!/usr/bin/expect -f
+
+set force_conservative 0  ;# set to 1 to force conservative mode even if
+			  ;# script wasn't run conservatively originally
+if {$force_conservative} {
+	set send_slow {1 .1}
+	proc send {ignore arg} {
+		sleep .1
+		exp_send -s -- $arg
+	}
+}
+
+
+set timeout -1
+spawn $env(SHELL)
+match_max 100000
+
+###once your shell opens, expect will automatically ssh you to the ASC jump server
+expect "*$ "
+send -- "\[200~ssh <NAME.NUMBER>@jump.asc.ohio-state.edu\[201~"
+expect "\[7mssh *@jump.asc.ohio-state.edu\[27m"
+send -- "\r"
+expect "* Password: "
+send -- "<YOUR PASSWORD>"
+
+###opts for DUO push
+expect -exact "Passcode or option (1-2): "
+send -- "1\r"
+
+###waits until you respons to the DUO push. Pretty neat!
+expect "*$ "
+
+###you can change your ssh target if there's another server you go to regularly
+send -- "ssh unity\r"
+expect -exact "Password: "
+send -- "<YOUR PASSWORD>"
+
+###passes control over to you
+interact
