@@ -49,7 +49,7 @@ However, the `alias` command only sets an alias for your session, i.e. your alia
 To set a permanent alias, you need to edit your ~/.bashrc file.
 Luckily, the necessary syntax is exactly the same as the `alias` command:
 
-`$ echo "alias jump='ssh user@jump.server' >> ~/.bashrc`
+`$ echo "alias jump='ssh user@jump.server'" >> ~/.bashrc`
 
 Alternatively:
 
